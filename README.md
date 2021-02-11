@@ -1,2 +1,2 @@
 # ML with python
- This repository contains my machine learning and deep learning code
+ This repository contains machine learning and deep learning code
