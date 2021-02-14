@@ -39,10 +39,13 @@ class AdalineGD(object):
         for _ in range(self.n_iter):
             net_input = self.net_input(X)
             output = self.activation(net_input)
-            errors = (y - output)
+            # Calculate cost J(w) = 0.5 * sum(yi - phi(zi))^2
+            errors = y - output
+            cost = (errors**2).sum() / 2.0
+            # Calculate new weights: w = w + delta_w,
+            # where delta_w = -eta*∇J(w) = eta*sum(yi - phi(zi))*xi
             self.w_[1:] += self.eta * X.T.dot(errors)
             self.w_[0] += self.eta * errors.sum()
-            cost = (errors**2).sum() / 2.0
             self.cost_.append(cost)
 
         return self
@@ -60,45 +63,42 @@ class AdalineGD(object):
         return np.where(self.activation(self.net_input(X)) >= 0.0, 1, -1)
 
 
-# fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
-
-# ada1 = AdalineGD(n_iter=10, eta=0.01).fit(X, y)
-# ax[0].plot(range(1, len(ada1.cost_) + 1), np.log10(ada1.cost_), marker='o')
-# ax[0].set_xlabel('Epochs')
-# ax[0].set_ylabel('log(Sum-squared-error)')
-# ax[0].set_title('Adaline - Learning rate 0.01')
-
-# ada2 = AdalineGD(n_iter=10, eta=0.0001).fit(X, y)
-# ax[1].plot(range(1, len(ada2.cost_) + 1), ada2.cost_, marker='o')
-# ax[1].set_xlabel('Epochs')
-# ax[1].set_ylabel('Sum-squared-error')
-# ax[1].set_title('Adaline - Learning rate 0.0001')
-
-# # plt.savefig('images/02_11.png', dpi=300)
-# plt.show()
+# Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
+# Read-in the Iris data
+df = pandas.read_csv('data/iris.data', header=None, encoding='utf-8')
+# Plot the Iris data (select only Setosa and Versicolor => select only the first 100 lines)
+y = df.iloc[0:100, 4].values
+# Normalize Setosa to -1 and Versicolor to 1
+y = np.where(y == 'Iris-setosa', -1, 1)
+# Extract sepal length (pos 0) and petal length (pos 2)
+X = df.iloc[0:100, [0, 2]].values
 
 
+# Plot the cost against the number of epochs
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
+# With eta=0.01
+ada1 = AdalineGD(n_iter=15, eta=0.01).fit(X, y)
+ax[0].plot(range(1, len(ada1.cost_) + 1), np.log10(ada1.cost_), marker='o')
+ax[0].set_xlabel('Epochs')
+ax[0].set_ylabel('log(cost)')
+ax[0].set_title('ADALINE - Learning rate: 0.01')
+# with eta=0.0001
+ada2 = AdalineGD(n_iter=15, eta=0.0001).fit(X, y)
+ax[1].plot(range(1, len(ada2.cost_) + 1), ada2.cost_, marker='o')
+ax[1].set_xlabel('Epochs')
+ax[1].set_ylabel('Cost')
+ax[1].set_title('ADALINE - Learning rate: 0.0001')
+
+# plt.savefig('images/plots/adaline_with_2_learning_rates.png', dpi=300)
+plt.show()
 
 
+# Improve the gradient descent through feature scaling with standardization method
 
-
-
-
-# # ## Improving gradient descent through feature scaling
-
-
-
-
-
-
-
-# # standardize features
-# X_std = np.copy(X)
-# X_std[:, 0] = (X[:, 0] - X[:, 0].mean()) / X[:, 0].std()
-# X_std[:, 1] = (X[:, 1] - X[:, 1].mean()) / X[:, 1].std()
-
-
-
+# Standardize features
+X_std = np.copy(X)
+for j in range(X_std.ndim):
+    X_std[:, j] = (X[:, j] - X[:, j].mean()) / X[:, j].std()
 
 # ada_gd = AdalineGD(n_iter=15, eta=0.01)
 # ada_gd.fit(X_std, y)
