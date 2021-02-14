@@ -100,26 +100,55 @@ X_std = np.copy(X)
 for j in range(X_std.ndim):
     X_std[:, j] = (X[:, j] - X[:, j].mean()) / X[:, j].std()
 
-# ada_gd = AdalineGD(n_iter=15, eta=0.01)
-# ada_gd.fit(X_std, y)
+# Plotting decision regions
+def plot_decision_regions(X, y, classifier, resolution=0.02):
+    # Setup markers and colors
+    markers = ('X', 'x', 'o', '^', 'v')
+    colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
+    cmap = ListedColormap(colors[:len(np.unique(y))])
 
-# plot_decision_regions(X_std, y, classifier=ada_gd)
-# plt.title('Adaline - Gradient Descent')
-# plt.xlabel('sepal length [standardized]')
-# plt.ylabel('petal length [standardized]')
-# plt.legend(loc='upper left')
+    # Plot the decision surface
+    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+
+    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution))
+
+    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
+    Z = Z.reshape(xx1.shape)    # xx1.shape = 305x235
+
+    plt.contourf(xx1, xx2, Z, alpha=0.3, cmap=cmap, antialiased=True)
+    plt.xlim(xx1.min(), xx1.max())
+    plt.ylim(xx2.min(), xx2.max())
+
+    # Plot class data
+    for idx, cl in enumerate(np.unique(y)):
+        plt.scatter(x=X[y == cl, 0],
+                    y=X[y == cl, 1],
+                    alpha=0.8,
+                    c=colors[idx],
+                    marker=markers[idx],
+                    label=cl,
+                    edgecolor='black')
+
+ada_gd = AdalineGD(n_iter=15, eta=0.01).fit(X_std, y)
+
+plot_decision_regions(X_std, y, classifier=ada_gd)
+plt.title('ADALINE - Gradient Descent')
+plt.xlabel('Sepal length [standardized]')
+plt.ylabel('Petal length [standardized]')
+plt.legend(loc='upper left')
 # plt.tight_layout()
-# # plt.savefig('images/02_14_1.png', dpi=300)
-# plt.show()
 
-# plt.plot(range(1, len(ada_gd.cost_) + 1), ada_gd.cost_, marker='o')
-# plt.xlabel('Epochs')
-# plt.ylabel('Sum-squared-error')
+# plt.savefig('images/plots/adaline_gd_with_standardization.png', dpi=300)
+plt.show()
 
+plt.plot(range(1, len(ada_gd.cost_) + 1), ada_gd.cost_, marker='o')
+plt.xlabel('Epochs')
+plt.ylabel('Cost')
 # plt.tight_layout()
-# # plt.savefig('images/02_14_2.png', dpi=300)
-# plt.show()
 
+# plt.savefig('images/plots/adaline_gd_with_standardization_cost.png', dpi=300)
+plt.show()
 
 
 # # ## Large scale machine learning and stochastic gradient descent
