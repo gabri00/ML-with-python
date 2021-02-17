@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 
 from plotting.plot_decision_regions import plot_decision_regions
 
-# Large scale machine learning and stochastic gradient descent
+"""
+Stochastic (or online) gradient descent optimization for Adaline
+"""
 
 class AdalineSGD(object):
     """
@@ -97,26 +99,40 @@ class AdalineSGD(object):
         return np.where(self.activation(self.net_input(X)) >= 0.0, 1, -1)
 
 
-# Show plots related to Stochastic Gradient Descent Adaline
-ada_sgd = AdalineSGD(n_iter=15, eta=0.01, random_state=1)
+# Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
+df = pandas.read_csv('data/iris.data', header=None, encoding='utf-8')
+
+y = df.iloc[0:100, 4].values            # Select only Setosa and Versicolor => select the first 100 lines
+y = np.where(y == 'Iris-setosa', -1, 1) # Set Setosa to -1 and Versicolor to 1
+X = df.iloc[0:100, [0, 2]].values       # Extract sepal length (pos 0) and petal length (pos 2)
+
+# Standardize features
+X_std = np.copy(X)
+for j in range(X_std.ndim):
+    X_std[:, j] = (X[:, j] - X[:, j].mean()) / X[:, j].std()
+
+# Train model
+ada_sgd = AdalineSGD(n_iter=15, eta=0.01, random_state_seed=1)
 ada_sgd.fit(X_std, y)
 
+# Plot decision regions
 plot_decision_regions(X_std, y, classifier=ada_sgd)
 
-plt.title('Adaline - Stochastic Gradient Descent')
 plt.xlabel('Sepal length [standardized]')
 plt.ylabel('Petal length [standardized]')
 plt.legend(loc='upper left')
+plt.title('ADALINE - Stochastic Gradient Descent regions')
 
-plt.tight_layout()
-plt.show()
 # plt.savefig('images/plots/adaline_sgd_with_standardization_decision_regions.png', dpi=300)
+plt.show()
 
+# Plot cost per epoch
 plt.plot(range(1, len(ada_sgd.cost_) + 1), ada_sgd.cost_, marker='o')
 plt.xlabel('Epochs')
 plt.ylabel('Average Cost')
+plt.title('ADALINE_SGD - Cost per epoch')
 
-plt.tight_layout()
-plt.show()
 # plt.savefig('images/plots/adaline_sgd_with_standardization_cost.png', dpi=300)
+plt.show()
+
 # ada_sgd.partial_fit(X_std[0, :], y[0])

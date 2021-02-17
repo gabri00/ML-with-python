@@ -7,10 +7,8 @@ from plotting.plot_decision_regions import plot_decision_regions
 """
 Implementation of the perceptron learning algorithm for classification
     X -> features
-    [w0, w1, ..., wm] -> weights
-    threshold function -> sgn{z}
     y[] -> output
-    delta_w -> updates
+    threshold function -> sgn{z}
 """
 
 class Perceptron(object):
@@ -45,36 +43,35 @@ class Perceptron(object):
 
         for _ in range(self.n_iter):
             curr_error = 0
+
             for xi, target in zip(X, y):
                 # delta_wj (aka update) = eta * (yi - ypi) * xi
-                update = self.eta * (target - self.predict(xi))
                 # wj = wj + delta_wj
+                update = self.eta * (target - self.predict(xi))
                 self.w_[1:] += update * xi
                 self.w_[0] += update
+                # Update the error of current epoch
                 curr_error += int(update != 0.0)
+
             self.errors_.append(curr_error)
 
         return self
 
     def net_input(self, X):
-        # Calculate network input (ypi) as the dot product of w and x (no need to transpose here)
+        # Calculate network input (ypi) as the dot product of w and X (no need to transpose here)
         return np.dot(X, self.w_[1:]) + self.w_[0]
 
     def predict(self, X):
-        # Return class label (y) after passing through sign function
+        # Return class label after passing through sign function
         return np.where(self.net_input(X) >= 0.0, 1, -1)
 
 
-# Training the perceptron model on the Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
-
-# Read-in the Iris data
+# Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
 df = pandas.read_csv('data/iris.data', header=None, encoding='utf-8')
-# Plot the Iris data (select only Setosa and Versicolor => select only the first 100 lines)
-y = df.iloc[0:100, 4].values
-# Normalize Setosa to -1 and Versicolor to 1
-y = np.where(y == 'Iris-setosa', -1, 1)
-# Extract sepal length (pos 0) and petal length (pos 2)
-X = df.iloc[0:100, [0, 2]].values
+
+y = df.iloc[0:100, 4].values            # Select only Setosa and Versicolor => select the first 100 lines
+y = np.where(y == 'Iris-setosa', -1, 1) # Set Setosa to -1 and Versicolor to 1
+X = df.iloc[0:100, [0, 2]].values       # Extract sepal length (pos 0) and petal length (pos 2)
 
 # Plot the iris data
 plt.scatter(X[:50, 0], X[:50, 1], color='red', marker='o', edgecolor='black', label='Setosa')
@@ -83,8 +80,9 @@ plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='x', label='Versico
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc='upper left')
+plt.title('Iris data')
 
-plt.savefig('images/plots/iris_data_plot.png', dpi=300)
+# plt.savefig('images/plots/iris_data_plot.png', dpi=300)
 plt.show()
 
 
@@ -96,6 +94,7 @@ perceptron.fit(X, y)
 plt.plot(range(1, len(perceptron.errors_) + 1), perceptron.errors_, marker='o')
 plt.xlabel('Epochs')
 plt.ylabel('Number of updates')
+plt.title('Perceptron - Updates per epoch')
 
 # plt.savefig('images/plots/misclassification_errors_per_epoch_plot.png', dpi=300)
 plt.show()
@@ -104,6 +103,7 @@ plot_decision_regions(X, y, classifier=perceptron)
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc='upper left')
+plt.title('Perceptron - Decision regions')
 
 # plt.savefig('images/plots/decision_regions_plot.png', dpi=300)
 plt.show()

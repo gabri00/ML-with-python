@@ -4,8 +4,14 @@ import matplotlib.pyplot as plt
 
 from plotting.plot_decision_regions import plot_decision_regions
 
-# Implementation of the adaptive linear neuron (aka ADALINE) single layer NN
-# The weights are updated by minimizing the cost function via gradient descent
+"""
+Implementation of the adaptive linear neuron (aka ADALINE) single layer Neural Network
+The weights are updated by minimizing the cost function via Gradient Descent
+    X -> features
+    y[] -> output
+    activation function -> phi(z) = z
+    threshold function -> sgn{z}
+"""
 
 class AdalineGD(object):
     """
@@ -40,7 +46,7 @@ class AdalineGD(object):
         for _ in range(self.n_iter):
             net_input = self.net_input(X)
             output = self.activation(net_input)
-            # Calculate cost J(w) = 0.5 * sum(yi - phi(zi))^2
+            # Calculate the cost J(w) = 0.5 * sum(yi - phi(zi))^2
             errors = y - output
             cost = (errors**2).sum() / 2.0
             # Calculate new weights: w = w + delta_w,
@@ -56,7 +62,7 @@ class AdalineGD(object):
         return np.dot(X, self.w_[1:]) + self.w_[0]
 
     def activation(self, X):
-        # Compute linear activation, phi(z). In Adaline phi(z) is the identity function, so phi(w^T*x) = w^T*x
+        # Compute linear activation, phi(z)
         return X
 
     def predict(self, X):
@@ -65,15 +71,11 @@ class AdalineGD(object):
 
 
 # Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
-# Read-in the Iris data
 df = pandas.read_csv('data/iris.data', header=None, encoding='utf-8')
-# Plot the Iris data (select only Setosa and Versicolor => select only the first 100 lines)
-y = df.iloc[0:100, 4].values
-# Normalize Setosa to -1 and Versicolor to 1
-y = np.where(y == 'Iris-setosa', -1, 1)
-# Extract sepal length (pos 0) and petal length (pos 2)
-X = df.iloc[0:100, [0, 2]].values
 
+y = df.iloc[0:100, 4].values            # Select only Setosa and Versicolor => select the first 100 lines
+y = np.where(y == 'Iris-setosa', -1, 1) # Set Setosa to -1 and Versicolor to 1
+X = df.iloc[0:100, [0, 2]].values       # Extract sepal length (pos 0) and petal length (pos 2)
 
 # Plot the cost against the number of epochs
 fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
@@ -83,7 +85,7 @@ ax[0].plot(range(1, len(ada1.cost_) + 1), np.log10(ada1.cost_), marker='o')
 ax[0].set_xlabel('Epochs')
 ax[0].set_ylabel('log(cost)')
 ax[0].set_title('ADALINE - Learning rate: 0.01')
-# with eta=0.0001
+# With eta=0.0001
 ada2 = AdalineGD(n_iter=15, eta=0.0001).fit(X, y)
 ax[1].plot(range(1, len(ada2.cost_) + 1), ada2.cost_, marker='o')
 ax[1].set_xlabel('Epochs')
@@ -95,28 +97,30 @@ plt.show()
 
 
 # Improve the gradient descent through feature scaling with standardization method
-
 # Standardize features
 X_std = np.copy(X)
 for j in range(X_std.ndim):
     X_std[:, j] = (X[:, j] - X[:, j].mean()) / X[:, j].std()
 
+# Train model
 ada_gd = AdalineGD(n_iter=15, eta=0.01).fit(X_std, y)
 
+# Plot decision regions
 plot_decision_regions(X_std, y, classifier=ada_gd)
-plt.title('ADALINE - Gradient Descent')
+
 plt.xlabel('Sepal length [standardized]')
 plt.ylabel('Petal length [standardized]')
 plt.legend(loc='upper left')
-# plt.tight_layout()
+plt.title('ADALINE - Gradient Descent regions')
 
 # plt.savefig('images/plots/adaline_gd_with_standardization.png', dpi=300)
 plt.show()
 
+# Plot cost per epoch
 plt.plot(range(1, len(ada_gd.cost_) + 1), ada_gd.cost_, marker='o')
 plt.xlabel('Epochs')
 plt.ylabel('Cost')
-# plt.tight_layout()
+plt.title('ADALINE_GD - Cost per epoch')
 
 # plt.savefig('images/plots/adaline_gd_with_standardization_cost.png', dpi=300)
 plt.show()
