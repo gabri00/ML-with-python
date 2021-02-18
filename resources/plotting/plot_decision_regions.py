@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
 # Plotting decision regions
-def plot_decision_regions(X, y, classifier, resolution=0.02):
+def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
     # Setup markers and colors
-    markers = ('X', 'x', 'o', '^', 'v')
+    markers = ('X', 'x', 'v', 'o', '^')
     colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
     cmap = ListedColormap(colors[:len(np.unique(y))])
 
@@ -16,7 +16,7 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
     xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution))
 
     Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
-    Z = Z.reshape(xx1.shape)    # xx1.shape = 305x235
+    Z = Z.reshape(xx1.shape)
 
     plt.contourf(xx1, xx2, Z, alpha=0.3, cmap=cmap, antialiased=True)
     plt.xlim(xx1.min(), xx1.max())
@@ -26,8 +26,19 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
     for idx, cl in enumerate(np.unique(y)):
         plt.scatter(x=X[y == cl, 0],
                     y=X[y == cl, 1],
-                    alpha=0.8,
                     c=colors[idx],
+                    alpha=0.8,
                     marker=markers[idx],
-                    label=cl,
-                    edgecolor='black')
+                    edgecolor='black',
+                    label=cl)
+        
+        # Highlight test examples
+        if test_idx:
+            plt.scatter(x=X[test_idx, 0],
+                        y=X[test_idx, 1],
+                        c='',
+                        alpha=1.0,
+                        marker='o',
+                        edgecolor='yellow',
+                        s=120,
+                        label='test set')
