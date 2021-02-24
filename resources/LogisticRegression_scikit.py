@@ -40,3 +40,6 @@ plt.ylabel('Petal width [standardized]')
 plt.legend(loc='upper left')
 plt.title('Logistic Regression classifier - scikit')
 plt.show()
+
+# print(lr.predict_proba(X_test_std[:6, :]))
+# print(lr.predict_proba(X_test_std[:6, :]).argmax(axis=1))
