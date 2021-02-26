@@ -2,7 +2,7 @@ import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 
-from plotting.plot_decision_regions import plot_decision_regions
+from functions.plot_decision_regions import plot_decision_regions
 
 """
 Stochastic (or online) gradient descent optimization for Adaline

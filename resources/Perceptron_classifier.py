@@ -2,7 +2,7 @@ import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 
-from plotting.plot_decision_regions import plot_decision_regions
+from functions.plot_decision_regions import plot_decision_regions
 
 """
 Implementation of the perceptron learning algorithm for classification
@@ -77,33 +77,33 @@ X = df.iloc[0:100, [0, 2]].values       # Extract sepal length (pos 0) and petal
 plt.scatter(X[:50, 0], X[:50, 1], color='red', marker='o', edgecolor='black', label='Setosa')
 plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='x', label='Versicolor')
 
+plt.title('Iris dataset feature')
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc='upper left')
-plt.title('Iris data')
-
-# plt.savefig('images/plots/iris_data_plot.png', dpi=300)
 plt.show()
 
 
-# Train the perceptron model
+# Train the Perceptron model
 perceptron = Perceptron(eta=0.1, n_iter=10)
 perceptron.fit(X, y)
 
 # Plot the number of updates per iteration
 plt.plot(range(1, len(perceptron.errors_) + 1), perceptron.errors_, marker='o')
+
+plt.title('Perceptron classifier - Updates per epoch')
 plt.xlabel('Epochs')
 plt.ylabel('Number of updates')
-plt.title('Perceptron - Updates per epoch')
-
-# plt.savefig('images/plots/misclassification_errors_per_epoch_plot.png', dpi=300)
 plt.show()
 
+
+# Plot decision regions
 plot_decision_regions(X, y, classifier=perceptron)
+
+plt.title('Perceptron classifier - Decision regions')
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc='upper left')
-plt.title('Perceptron - Decision regions')
-
-# plt.savefig('images/plots/decision_regions_plot.png', dpi=300)
 plt.show()
+
+# to save plots use: plt.savefig('images/plots/pic.png', dpi=300)

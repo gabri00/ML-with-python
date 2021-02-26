@@ -3,7 +3,7 @@ import pandas
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-from plotting.plot_decision_regions import plot_decision_regions
+from functions.plot_decision_regions import plot_decision_regions
 
 """
 Implementation of the Logistic Regression Classifier using Gradient Descent to minimize the cost. 
@@ -90,10 +90,9 @@ lrgd.fit(X_train_01_subset, y_train_01_subset)
 # Plot decision regions
 plot_decision_regions(X=X_train_01_subset, y=y_train_01_subset, classifier=lrgd)
 
+plt.title('Logistic Regression (GD) - Regions')
 plt.xlabel('Petal length [standardized]')
 plt.ylabel('Petal width [standardized]')
 plt.legend(loc='upper left')
-plt.title('Logistic Regression - Gradient Descent regions')
-
 plt.tight_layout()
 plt.show()
