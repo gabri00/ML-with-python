@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/Gabri/atom/ML-with-python/resources/')
+
 import numpy as np
 import pandas
 import matplotlib.pyplot as plt
@@ -5,12 +8,12 @@ import matplotlib.pyplot as plt
 from functions.plot_decision_regions import plot_decision_regions
 
 """
-Stochastic (or online) gradient descent optimization for Adaline
+Stochastic (or online) Gradient Descent optimization for Adaline
 """
 
 class AdalineSGD(object):
     """
-    ADAptive LInear NEuron classifier:
+    Adaptive Linear Neuron classifier:
 	    Parameters
             - eta : (float) is the learning rate (0.0 < eta < 1.0)
             - n_iter : (int) number of iterations over the training dataset
@@ -115,24 +118,25 @@ for j in range(X_std.ndim):
 ada_sgd = AdalineSGD(n_iter=15, eta=0.01, random_state_seed=1)
 ada_sgd.fit(X_std, y)
 
+
 # Plot decision regions
 plot_decision_regions(X_std, y, classifier=ada_sgd)
 
+plt.title('ADALINE_SGD - Decision regions')
 plt.xlabel('Sepal length [standardized]')
 plt.ylabel('Petal length [standardized]')
 plt.legend(loc='upper left')
-plt.title('ADALINE - Stochastic Gradient Descent regions')
 
-# plt.savefig('images/plots/adaline_sgd_with_standardization_decision_regions.png', dpi=300)
 plt.show()
+
 
 # Plot cost per epoch
 plt.plot(range(1, len(ada_sgd.cost_) + 1), ada_sgd.cost_, marker='o')
+
+plt.title('ADALINE_SGD - Cost per epoch')
 plt.xlabel('Epochs')
 plt.ylabel('Average Cost')
-plt.title('ADALINE_SGD - Cost per epoch')
 
-# plt.savefig('images/plots/adaline_sgd_with_standardization_cost.png', dpi=300)
 plt.show()
 
 # ada_sgd.partial_fit(X_std[0, :], y[0])

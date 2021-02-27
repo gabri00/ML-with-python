@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/Gabri/atom/ML-with-python/resources/')
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -27,8 +30,9 @@ plot_decision_regions(X=X_std,
                       classifier=lr,
                       test_idx=range(105, 150))
 
-plt.title('Logistic Regression classifier - scikit')
+plt.title('Logistic Regression - Scikit')
 plt.xlabel('Petal length [standardized]')
 plt.ylabel('Petal width [standardized]')
 plt.legend(loc='upper left')
+
 plt.show()

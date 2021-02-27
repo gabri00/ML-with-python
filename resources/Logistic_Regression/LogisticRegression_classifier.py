@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/Gabri/atom/ML-with-python/resources/')
+
 import numpy as np
 import pandas
 import matplotlib.pyplot as plt
@@ -90,9 +93,10 @@ lrgd.fit(X_train_01_subset, y_train_01_subset)
 # Plot decision regions
 plot_decision_regions(X=X_train_01_subset, y=y_train_01_subset, classifier=lrgd)
 
-plt.title('Logistic Regression (GD) - Regions')
+plt.title('Logistic Regression (GD) - Decision regions')
 plt.xlabel('Petal length [standardized]')
 plt.ylabel('Petal width [standardized]')
 plt.legend(loc='upper left')
+
 plt.tight_layout()
 plt.show()

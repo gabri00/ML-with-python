@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/Gabri/atom/ML-with-python/resources/')
+
 import numpy as np
 import pandas
 import matplotlib.pyplot as plt
@@ -7,8 +10,8 @@ from functions.plot_decision_regions import plot_decision_regions
 """
 Implementation of the perceptron learning algorithm for classification
     X -> features
-    y[] -> output
-    threshold function -> sgn{z}
+    y -> outputs
+    sgn{z} -> threshold function
 """
 
 class Perceptron(object):
@@ -81,6 +84,7 @@ plt.title('Iris dataset feature')
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc='upper left')
+
 plt.show()
 
 
@@ -91,19 +95,19 @@ perceptron.fit(X, y)
 # Plot the number of updates per iteration
 plt.plot(range(1, len(perceptron.errors_) + 1), perceptron.errors_, marker='o')
 
-plt.title('Perceptron classifier - Updates per epoch')
+plt.title('Perceptron - Updates per epoch')
 plt.xlabel('Epochs')
 plt.ylabel('Number of updates')
+
 plt.show()
 
 
 # Plot decision regions
 plot_decision_regions(X, y, classifier=perceptron)
 
-plt.title('Perceptron classifier - Decision regions')
+plt.title('Perceptron - Decision regions')
 plt.xlabel('Sepal length [cm]')
 plt.ylabel('Petal length [cm]')
 plt.legend(loc='upper left')
-plt.show()
 
-# to save plots use: plt.savefig('images/plots/pic.png', dpi=300)
+plt.show()
