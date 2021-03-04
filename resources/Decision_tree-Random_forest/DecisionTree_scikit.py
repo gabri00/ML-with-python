@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 
 from sklearn import datasets
 from sklearn.tree import DecisionTreeClassifier
-from sklearn import tree
+# from sklearn import tree
 
-from pydotplus import graph_from_dot_data
 from sklearn.tree import export_graphviz
+# from pydotplus import graph_from_dot_data
 
 from functions.plot_decision_regions import plot_decision_regions
 from functions.init_dataset import init_dataset
@@ -42,14 +42,17 @@ plt.legend(loc='upper left')
 plt.tight_layout()
 plt.show()
 
-tree.plot_tree(tree_model)
-plt.show()
+# Display tree graph using sklearn
+# tree.plot_tree(tree_model)
+# plt.show()
 
+# Display tree graph using graphviz
 dot_data = export_graphviz(tree_model,
                            filled=True,
                            rounded=True,
+                           label=all,
                            class_names=['Setosa', 'Versicolor', 'Virginica'],
                            feature_names=['Petal length', 'Petal width'],
-                           out_file=None)
-graph = graph_from_dot_data(dot_data)
+                           out_file='decisionTree.dot')
+# graph = graph_from_dot_data(dot_data)
 # graph.write_png('images/tree.png')

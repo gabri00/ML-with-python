@@ -1,0 +1,25 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname=helvetica] ;
+edge [fontname=helvetica] ;
+0 [label="Petal width <= -0.586\n0.667\n105\n[35, 35, 35]\nSetosa", fillcolor="#ffffff"] ;
+1 [label="0.0\n35\n[35, 0, 0]\nSetosa", fillcolor="#e58139"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="Petal length <= 0.536\n0.5\n70\n[0, 35, 35]\nVersicolor", fillcolor="#ffffff"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="0.0\n30\n[0, 30, 0]\nVersicolor", fillcolor="#39e581"] ;
+2 -> 3 ;
+4 [label="Petal width <= 0.725\n0.219\n40\n[0, 5, 35]\nVirginica", fillcolor="#9355e9"] ;
+2 -> 4 ;
+5 [label="Petal length <= 0.647\n0.5\n8\n[0, 4, 4]\nVersicolor", fillcolor="#ffffff"] ;
+4 -> 5 ;
+6 [label="0.0\n2\n[0, 2, 0]\nVersicolor", fillcolor="#39e581"] ;
+5 -> 6 ;
+7 [label="0.444\n6\n[0, 2, 4]\nVirginica", fillcolor="#c09cf2"] ;
+5 -> 7 ;
+8 [label="Petal length <= 0.591\n0.061\n32\n[0, 1, 31]\nVirginica", fillcolor="#853fe6"] ;
+4 -> 8 ;
+9 [label="0.444\n3\n[0, 1, 2]\nVirginica", fillcolor="#c09cf2"] ;
+8 -> 9 ;
+10 [label="0.0\n29\n[0, 0, 29]\nVirginica", fillcolor="#8139e5"] ;
+8 -> 10 ;
+}
