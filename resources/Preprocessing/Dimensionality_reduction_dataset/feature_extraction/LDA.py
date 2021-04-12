@@ -32,7 +32,7 @@ for label in range(1, 4):
 	mean_vecs.append(np.mean(X_train_std[y_train == label], axis=0))
 
 # Compute the within-class scatter matrix (Sw)
-d = 134	# Dimensions
+d = 13	# Dimensions
 Sw = np.zeros((d, d))
 for label, mv in zip(range(1, 4), mean_vecs):
 	class_scatter = np.cov(X_train_std[y_train==label].T)
@@ -48,28 +48,31 @@ for i, mean_vec in enumerate(mean_vecs):
 	Sb += n * (mean_vec - mean_overall).dot((mean_vec - mean_overall).T)
 
 # Calculate the eigenvectors and eigenvalues of (Sw^-1).dot(Sb)
-eig_vals, eig_vecs = np.linalg.eig(no.linalg.inv(Sw).dot(Sb))
+eig_vals, eig_vecs = np.linalg.eig(np.linalg.inv(Sw).dot(Sb))
 
 # Select the k eigenvectors which correspond to the k largest eigenvalues
 eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:, i]) for i in range(len(eig_vals))]
 eig_pairs = sorted(eig_pairs, key=lambda k: k[0], reverse=True)
 
+# Build a projection matrix, W (k=2)
+W = np.hstack((eig_pairs[0][1][:, np.newaxis].real,
+               eig_pairs[1][1][:, np.newaxis].real))
+
+X_train_lda = X_train_std.dot(W)
 
 
+# Plot the new subspace
+colors = ['r', 'b', 'g']
+markers = ['s', 'x', 'o']
 
+for l, c, m in zip(np.unique(y_train), colors, markers):
+    plt.scatter(X_train_lda[y_train==l, 0],
+                X_train_lda[y_train==l, 1] * (-1),
+                c=c, label=l, marker=m)
 
-# # Plot the new subspace
-# colors = ['r', 'b', 'g']
-# markers = ['s', 'x', 'o']
+plt.xlabel('LD1')
+plt.ylabel('LD2')
+plt.legend(loc='lower right')
 
-# for l, c, m in zip(np.unique(y_train), colors, markers):
-#     plt.scatter(X_train_pca[y_train==l, 0],
-#                 X_train_pca[y_train==l, 1],
-#                 c=c, label=l, marker=m)
-
-# plt.xlabel('PC1')
-# plt.ylabel('PC2')
-# plt.legend(loc='lower left')
-
-# plt.tight_layout()
-# plt.show()
+plt.tight_layout()
+plt.show()

@@ -48,7 +48,7 @@ plt.show()
 # Select the k eigenvectors which correspond to the k largest eigenvalues
 eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:, i]) for i in range(len(eig_vals))]
 eig_pairs.sort(key=lambda k: k[0], reverse=True)
-# Build a projection matrix (k=2)
+# Build a projection matrix, W (k=2)
 W = np.hstack((eig_pairs[0][1][:, np.newaxis],
                eig_pairs[1][1][:, np.newaxis]))
 # Transform the 13-dimensional dataset, X, using the projection matrix, W, to obtain the new 2-dimensional feature subspace
