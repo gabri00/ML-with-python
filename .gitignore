@@ -19,3 +19,6 @@ MANIFEST
 .venv
 env/
 venv/
+
+# Datasets
+aclImdb/

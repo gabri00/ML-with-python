@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 from sklearn import datasets
 from sklearn.linear_model import Perceptron
-# from sklearn.metrics import accuracy_score
 
 from functions.plot_decision_regions import plot_decision_regions
 from functions.init_dataset import init_dataset

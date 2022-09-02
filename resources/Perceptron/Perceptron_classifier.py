@@ -7,23 +7,17 @@ import matplotlib.pyplot as plt
 
 from functions.plot_decision_regions import plot_decision_regions
 
-"""
-Implementation of the perceptron learning algorithm for classification
-    X -> features
-    y -> outputs
-    sgn{z} -> threshold function
-"""
+PATH = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
 
 class Perceptron(object):
     """
-    Perceptron classifier:
-        Parameters
-            - eta : (float) is the learning rate (0.0 < eta < 1.0)
-            - n_iter : (int) number of iterations over the training dataset
-            - random_state_seed : (int) random number generator seed for random weights initialization
-        Attributes
-            - w_ : (1D-array) weights after fitting
-            - errors_ : (list) number of updates in each epoch
+    Parameters
+        - eta : (float) learning rate (0.0 < eta < 1.0)
+        - n_iter : (int) number of iterations over the training dataset
+        - random_state_seed : (int) random number generator seed for random weights initialization
+    Attributes
+        - w_ : (1D-array) weights after fitting
+        - errors_ : (list) number of updates in each epoch
     """
     def __init__(self, eta=0.01, n_iter=50, random_state_seed=1):
         self.eta = eta
@@ -61,7 +55,7 @@ class Perceptron(object):
         return self
 
     def net_input(self, X):
-        # Calculate network input (ypi) as the dot product of w and X (no need to transpose here)
+        # Calculate network input (ypi) as the dot product of w and X
         return np.dot(X, self.w_[1:]) + self.w_[0]
 
     def predict(self, X):
@@ -69,24 +63,12 @@ class Perceptron(object):
         return np.where(self.net_input(X) >= 0.0, 1, -1)
 
 
-# Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
-df = pandas.read_csv('data/iris.data', header=None, encoding='utf-8')
+# Load Iris dataset from https://archive.ics.uci.edu\ml\machine-learning-databases\iris\iris.data
+df = pandas.read_csv(PATH, header=None, encoding='utf-8')
 
 y = df.iloc[0:100, 4].values            # Select only Setosa and Versicolor => select the first 100 lines
 y = np.where(y == 'Iris-setosa', -1, 1) # Set Setosa to -1 and Versicolor to 1
 X = df.iloc[0:100, [0, 2]].values       # Extract sepal length (pos 0) and petal length (pos 2)
-
-# Plot the iris data
-plt.scatter(X[:50, 0], X[:50, 1], color='red', marker='o', edgecolor='black', label='Setosa')
-plt.scatter(X[50:100, 0], X[50:100, 1], color='blue', marker='x', label='Versicolor')
-
-plt.title('Iris dataset feature')
-plt.xlabel('Sepal length [cm]')
-plt.ylabel('Petal length [cm]')
-plt.legend(loc='upper left')
-
-plt.show()
-
 
 # Train the Perceptron model
 perceptron = Perceptron(eta=0.1, n_iter=10)
@@ -100,7 +82,6 @@ plt.xlabel('Epochs')
 plt.ylabel('Number of updates')
 
 plt.show()
-
 
 # Plot decision regions
 plot_decision_regions(X, y, classifier=perceptron)
